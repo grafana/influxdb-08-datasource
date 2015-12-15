@@ -6,6 +6,11 @@ But it is easy to install this plugin!
 Either clone this repo into your grafana plugins directory (default /var/lib/grafana/plugins if your installing grafana with package).
 Restart grafana-server and the plugin should be automatically detected and used.
 
+```
+git clone git@github.com:grafana/datasource-plugin-influxdb-08.git
+sudo service grafana-server restart
+```
+
 
 ## Clone into a directory of your choice
 
