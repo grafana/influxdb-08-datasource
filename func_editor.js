@@ -34,7 +34,7 @@ function (angular, _, $) {
             var $link = $(this);
             var $input = $link.next();
 
-            $input.val($scope.target.column);
+            $input.val($scope.ctrl.target.column);
             $input.css('width', ($link.width() + 16) + 'px');
 
             $link.hide();
@@ -58,7 +58,7 @@ function (angular, _, $) {
             if ($input.val() !== '') {
               $link.text($input.val());
 
-              $scope.target.column = $input.val();
+              $scope.ctrl.target.column = $input.val();
               $scope.$apply($scope.get_data);
             }
 
@@ -82,9 +82,10 @@ function (angular, _, $) {
           function addTypeahead($input) {
             $input.attr('data-provide', 'typeahead');
 
+            var skaup = $scope
             $input.typeahead({
               source: function () {
-                return $scope.listColumns.apply(null, arguments);
+                return skaup.ctrl.listColumns.apply(null, arguments);
               },
               minLength: 0,
               items: 20,
@@ -108,7 +109,7 @@ function (angular, _, $) {
           function addElementsAndCompile() {
             $funcLink.appendTo(elem);
 
-            var $paramLink = $('<a ng-click="" class="graphite-func-param-link">' + $scope.target.column + '</a>');
+            var $paramLink = $('<a ng-click="" class="graphite-func-param-link">' + $scope.ctrl.target.column + '</a>');
             var $input = $(paramTemplate);
 
             $paramLink.appendTo(elem);
@@ -127,10 +128,7 @@ function (angular, _, $) {
           }
 
           addElementsAndCompile();
-
         }
       };
-
     });
-
 });

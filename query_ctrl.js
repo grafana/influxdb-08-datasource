@@ -1,17 +1,21 @@
 define([
   'angular',
+  'app/plugins/sdk'
 ],
-function (angular) {
+function (angular, sdk) {
   'use strict';
-
-  var module = angular.module('grafana.controllers');
 
   var seriesList = null;
 
-  module.controller('InfluxQueryCtrl_08', function($scope, $timeout) {
+  var InfluxQueryCtrl08 = (function(_super) {
+    var self;
 
-    $scope.init = function() {
-      var target = $scope.target;
+    function InfluxQueryCtrl08($scope, $injector, $timeout) {
+      _super.call(this, $scope, $injector)
+      this.timeout = $timeout;
+      this.scope = $scope;
+
+      var target = this.target;
 
       target.function = target.function || 'mean';
       target.column = target.column || 'value';
@@ -29,57 +33,64 @@ function (angular) {
         delete target.groupby_field_add;
       }
 
-      $scope.functions = [
+      this.functions = [
         'count', 'mean', 'sum', 'min',
         'max', 'mode', 'distinct', 'median',
         'derivative', 'stddev', 'first', 'last',
         'difference'
       ];
 
-      $scope.operators = ['=', '=~', '>', '<', '!~', '<>'];
-      $scope.oldSeries = target.series;
-      $scope.$on('typeahead-updated', function() {
-        $timeout($scope.get_data);
-      });
+      this.operators = ['=', '=~', '>', '<', '!~', '<>'];
+      this.oldSeries = target.series;
+      //this.$on('typeahead-updated', function() {
+      //  self.timeout(self.panelCtrl.refresh);
+      //});
+
+      self = this;
     };
 
-    $scope.toggleQueryMode = function () {
-      $scope.target.rawQuery = !$scope.target.rawQuery;
+    InfluxQueryCtrl08.prototype = Object.create(_super.prototype);
+    InfluxQueryCtrl08.prototype.constructor = InfluxQueryCtrl08;
+
+    InfluxQueryCtrl08.templateUrl = 'public/plugins/influxdb_08/partials/query.editor.html';
+
+    InfluxQueryCtrl08.prototype.toggleQueryMode = function () {
+      this.target.rawQuery = !this.target.rawQuery;
     };
 
     // Cannot use typeahead and ng-change on blur at the same time
-    $scope.seriesBlur = function() {
-      if ($scope.oldSeries !== $scope.target.series) {
-        $scope.oldSeries = $scope.target.series;
-        $scope.columnList = null;
-        $scope.get_data();
+    InfluxQueryCtrl08.prototype.seriesBlur = function() {
+      if (this.oldSeries !== this.target.series) {
+        this.oldSeries = this.target.series;
+        this.columnList = null;
+        this.panelCtrl.refresh();
       }
     };
 
-    $scope.changeFunction = function(func) {
-      $scope.target.function = func;
-      $scope.get_data();
+    InfluxQueryCtrl08.prototype.changeFunction = function(func) {
+      this.target.function = func;
+      this.panelCtrl.refresh();
     };
 
     // called outside of digest
-    $scope.listColumns = function(query, callback) {
-      if (!$scope.columnList) {
-        $scope.$apply(function() {
-          $scope.datasource.listColumns($scope.target.series).then(function(columns) {
-            $scope.columnList = columns;
+    InfluxQueryCtrl08.prototype.listColumns = function(query, callback) {
+      if (!self.columnList) {
+        self.scope.$apply(function() {
+          self.datasource.listColumns(self.target.series).then(function(columns) {
+            self.columnList = columns;
             callback(columns);
           });
         });
       }
       else {
-        return $scope.columnList;
+        return self.columnList;
       }
     };
 
-    $scope.listSeries = function(query, callback) {
+    InfluxQueryCtrl08.prototype.listSeries = function(query, callback) {
       if (query !== '') {
         seriesList = [];
-        $scope.datasource.listSeries(query).then(function(series) {
+        this.datasource.listSeries(query).then(function(series) {
           seriesList = series;
           callback(seriesList);
         });
@@ -89,7 +100,9 @@ function (angular) {
       }
     };
 
-    $scope.init();
+    return InfluxQueryCtrl08;
 
-  });
+  })(sdk.QueryCtrl);
+
+  return InfluxQueryCtrl08;
 });

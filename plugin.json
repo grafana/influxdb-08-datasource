@@ -1,21 +1,9 @@
 {
   "id": "influxdb_08",
-  "pluginType": "datasource",
+  "type": "datasource",
   "name": "InfluxDB 0.8.x",
 
-  "type": "influxdb_08",
-  "serviceName": "InfluxDatasource_08",
-
-  "module": "plugins/influxdb_08/datasource",
-
-  "partials": {
-    "config": "public/plugins/influxdb_08/partials/config.html"
-  },
-
-  "staticRoot": {
-    "url": "influxdb_08",
-    "path": "."
-  },
+  "staticRoot": ".",
 
   "defaultMatchFormat": "regex values",
   "metrics": true,

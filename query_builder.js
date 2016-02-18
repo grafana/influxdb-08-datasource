@@ -27,7 +27,7 @@ function () {
     }
 
     query +=  target.function + '(' + target.column + ')';
-    query += ' from ' + seriesName + ' where $timeFilter';
+        query += ' from ' + seriesName + ' where $timeFilter';
 
     if (target.condition) {
       query += ' and ' + target.condition;
