@@ -4,16 +4,12 @@ define([
   'app/core/utils/datemath',
   './influx_series',
   './query_builder',
-  './directives',
   './query_ctrl',
   './func_editor',
 ],
 function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
   'use strict';
 
-  //var module = angular.module('grafana.services');
-
-  //module.factory('InfluxDatasource_08', function($q, backendSrv, templateSrv) {
   var self;
 
   function InfluxDatasource(instanceSettings, $q, backendSrv, templateSrv) {
