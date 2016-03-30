@@ -10,7 +10,7 @@ But it is easy to install this plugin!
 Use the new grafana-cli tool to install the InfluxDB 0.8 datasource from the commandline:
 
 ```
-grafana-cli install grafana-influxdb-08-datasource
+grafana-cli plugins install grafana-influxdb-08-datasource
 ```
 
 The plugin will be installed into your grafana plugins directory; the default is /var/lib/grafana/plugins if you installed the grafana package.
