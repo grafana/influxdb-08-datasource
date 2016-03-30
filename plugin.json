@@ -1,5 +1,5 @@
 {
-  "id": "influxdb-08-datasource",
+  "id": "grafana-influxdb-08-datasource",
   "type": "datasource",
   "name": "InfluxDB 0.8.x",
 
