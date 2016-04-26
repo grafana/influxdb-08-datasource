@@ -52,7 +52,7 @@ function (angular, sdk) {
     InfluxQueryCtrl08.prototype = Object.create(_super.prototype);
     InfluxQueryCtrl08.prototype.constructor = InfluxQueryCtrl08;
 
-    InfluxQueryCtrl08.templateUrl = 'public/plugins/influxdb_08/partials/query.editor.html';
+    InfluxQueryCtrl08.templateUrl = 'public/plugins/grafana-influxdb-08-datasource/partials/query.editor.html';
 
     InfluxQueryCtrl08.prototype.toggleQueryMode = function () {
       this.target.rawQuery = !this.target.rawQuery;
