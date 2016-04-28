@@ -1,111 +1,51 @@
-<query-editor-row ctrl="ctrl">
+<query-editor-row query-ctrl="ctrl" can-collapse="false" has-text-edit-mode="true">
 
-	<div class="tight-form">
-		<!-- Raw Query mode  -->
-		<input type="text" class="tight-form-clear-input" style="width: 80%" ng-model="ctrl.target.query"
-		placeholder="select ..." ng-show="ctrl.target.rawQuery"
-		give-focus="ctrl.target.rawQuery"
-		spellcheck='false'
-		data-min-length=0 data-items=100
-		ng-model-onblur
-		ng-blur="ctrl.panelCtrl.refresh();"></input>
-
-		<!-- Query editor mode -->
-		<ul class="tight-form-list" role="menu" ng-hide="ctrl.target.rawQuery">
-			<li class="tight-form-item">
-				series
-			</li>
-			<li>
-				<input type="text"
-				class="tight-form-input span8"
-				ng-model="ctrl.target.series"
-				spellcheck='false'
-				bs-typeahead="listSeries"
-				match-all="true"
-				min-length="3"
-				placeholder="series name"
-				data-min-length=0 data-items=100
-				ng-blur="ctrl.seriesBlur()">
-			</li>
-
-			<li class="tight-form-item">
-				alias
-			</li>
-
-			<li>
-				<input type="text" class="input-medium tight-form-input" ng-model="ctrl.target.alias"
-				spellcheck='false' placeholder="alias" ng-blur="ctrl.panelCtrl.refresh()">
-			</li>
-
-		</ul>
-
-		<div class="clearfix"></div>
+	<div ng-if="ctrl.target.rawQuery">
+    <div class="gf-form">
+      <input type="text" class="gf-form-input" ng-model="ctrl.target.query" spellcheck="false" ng-blur="ctrl.refresh()"></input>
+    </div>
 	</div>
 
-	<div class="tight-form">
-		<!-- Raw Query mode  -->
-		<ul class="tight-form-list" ng-show="target.rawQuery">
-			<li class="tight-form-item tight-form-align">
-				alias
-			</li>
-			<li>
-				<input type="text"
-				class="input-medium tight-form-input"
-				ng-model="ctrl.target.alias"
-				spellcheck='false'
-				placeholder="alias"
-				ng-blur="ctrl.panelCtrl.refresh()">
-			</li>
-			<li class="tight-form-item">
-				group by time
-			</li>
-			<li>
-				<input type="text" class="input-mini tight-form-input" ng-model="target.interval"
-				spellcheck='false' placeholder="{{ctrl.panel.interval}}" data-placement="right"
-				bs-tooltip="'Leave blank for auto handling based on time range and panel width'"
-				ng-model-onblur ng-change="ctrl.panelCtrl.refresh()" >
-			</li>
-		</ul>
+	<div ng-if="!ctrl.target.rawQuery">
+    <div class="gf-form-inline">
+      <div class="gf-form gf-form--grow">
+        <label class="gf-form-label width-8">Series</label>
+        <input type="text"
+              class="gf-form-input"
+              ng-model="ctrl.target.series"
+              spellcheck='false'
+              bs-typeahead="listSeries"
+              match-all="true"
+              min-length="3"
+              placeholder="series name"
+              data-min-length=0 data-items=100
+              ng-blur="ctrl.seriesBlur()">
+        </input>
+      </div>
+    </div>
 
-		<!-- Query editor mode -->
-		<ul class="tight-form-list" role="menu" ng-hide="ctrl.target.rawQuery">
-			<li class="tight-form-item tight-form-align">
-				select
-			</li>
-			<li class="dropdown">
-				<span influxdb-func-editor08 class="tight-form-item tight-form-func">
+    <div class="gf-form-inline">
+      <div class="gf-form ">
+        <label class="gf-form-label width-8">Select</label>
+        <span class="dropdown">
+          <span influxdb-func-editor08 class="tight-form-item tight-form-func">
 				</span>
-			</li>
+			</div>
 
-			<li class="tight-form-item">
-				where
-			</li>
-			<li>
-				<input type="text" class="input-medium tight-form-input" ng-model="ctrl.target.condition"
+      <div class="gf-form">
+        <label class="gf-form-label">Where</label>
+				<input type="text" class="gf-form-input" ng-model="ctrl.target.condition"
 				bs-tooltip="'Add a where clause'" data-placement="right" spellcheck='false' placeholder="column ~= value" ng-blur="ctrl.panelCtrl.refresh();">
-			</li>
+			</div>
 
-			<li class="tight-form-item">
-				group by time
-			</li>
-			<li>
-				<input type="text" class="input-mini tight-form-input" ng-model="target.interval"
-				spellcheck='false' placeholder="{{interval}}" data-placement="right"
-				bs-tooltip="'Leave blank for auto handling based on time range and panel width'"
-				ng-model-onblur ng-change="ctrl.panelCtrl.refresh();" >
-			</li>
-
-			<li class="tight-form-item">
-				and
-			</li>
-
-			<li>
-				<input type="text" class="input-small tight-form-input" ng-model="ctrl.target.groupby_field" bs-tooltip="'Add a group by column or leave blank'"
+      <div class="gf-form">
+        <div class="gf-form-label">Group by column</div>
+				<input type="text" class="gf-form-input" ng-model="ctrl.target.groupby_field" bs-tooltip="'Add a group by column or leave blank'"
 				placeholder="column" spellcheck="false" bs-typeahead="listColumns" data-min-length=0 ng-blur="ctrl.panelCtrl.refresh();">
-			</li>
+			</div>
 
-			<li class="dropdown">
-				<a class="tight-form-item pointer" data-toggle="dropdown" bs-tooltip="'Insert missing values, important when stacking'" data-placement="right">
+			<div class="gf-form dropdown">
+				<a class="gf-form-label pointer" data-toggle="dropdown" bs-tooltip="'Insert missing values, important when stacking'" data-placement="right">
 					<span ng-show="ctrl.target.fill">
 						fill ({{ctrl.target.fill}})
 					</span>
@@ -118,10 +58,31 @@
 					<li><a ng-click="ctrl.target.fill = 'null'">fill (null)</a></li>
 					<li><a ng-click="ctrl.target.fill = '0'">fill (0)</a></li>
 				</ul>
-			</li>
-		</ul>
-		<div class="clearfix"></div>
-	</div>
+			</div>
 
+      <div class="gf-form gf-form--grow">
+				<div class="gf-form-label gf-form-label--grow"></div>
+			</div>
+    </div>
+  </div>
+
+  <div class="gf-form-inline">
+    <div class="gf-form">
+      <label class="gf-form-label width-8">Group by time</label>
+      <input type="text" class="gf-form-input" ng-model="target.interval"
+        spellcheck='false' placeholder="{{ctrl.panel.interval}}" data-placement="right"
+        bs-tooltip="'Leave blank for auto handling based on time range and panel width'"
+        ng-model-onblur ng-change="ctrl.panelCtrl.refresh()" >
+      </input>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label">Alias</label>
+      <input type="text" class="gf-form-input" ng-model="ctrl.target.alias" spellcheck='false' placeholder="alias" ng-blur="ctrl.panelCtrl.refresh()">
+    </div>
+
+    <div class="gf-form gf-form--grow">
+      <div class="gf-form-label gf-form-label--grow"></div>
+    </div>
+  </div>
 
 </query-editor-row>

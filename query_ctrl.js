@@ -54,7 +54,7 @@ function (angular, sdk) {
 
     InfluxQueryCtrl08.templateUrl = 'public/plugins/grafana-influxdb-08-datasource/partials/query.editor.html';
 
-    InfluxQueryCtrl08.prototype.toggleQueryMode = function () {
+    InfluxQueryCtrl08.prototype.toggleEditorMode = function () {
       this.target.rawQuery = !this.target.rawQuery;
     };
 
