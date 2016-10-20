@@ -5,7 +5,7 @@ define([
   './influx_series',
   './query_builder',
   './query_ctrl',
-  './func_editor',
+  './func_editor'
 ],
 function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
   'use strict';
@@ -13,12 +13,30 @@ function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
   var self;
 
   function InfluxDatasource(instanceSettings, $q, backendSrv, templateSrv) {
+    var _self = this;
+
     this.urls = _.map(instanceSettings.url.split(','), function(url) {
       return url.trim();
     });
 
-    this.username = instanceSettings.username;
-    this.password = instanceSettings.password;
+    this.database = instanceSettings.jsonData.database;
+
+    // add database name to urls
+    if (this.database && this.urls) {
+      this.urls = _.map(this.urls, function (url) {
+        return url + (url[url.length - 1] != '/' ? '/' : '') + 'db/' + _self.database;
+      });
+    }
+
+    this.configs = {
+      username: instanceSettings.jsonData.username,
+      password: instanceSettings.jsonData.password,
+      name: instanceSettings.name,
+      basicAuth: instanceSettings.basicAuth
+    };
+
+    this.username = instanceSettings.jsonData.username;
+    this.password = instanceSettings.jsonData.password;
     this.name = instanceSettings.name;
     this.basicAuth = instanceSettings.basicAuth;
 
@@ -78,7 +96,7 @@ function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
     }
 
     return this._seriesQuery('select * from ' + seriesName + ' limit 1').then(function(data) {
-      if (!data) {
+      if (!data || data.length === 0) {
         return [];
       }
       return data[0].columns.map(function(item) {
@@ -147,12 +165,13 @@ function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
 
   InfluxDatasource.prototype._seriesQuery = function(query) {
     return this._influxRequest('GET', '/series', {
-      q: query,
+      q: query
     });
   };
 
   InfluxDatasource.prototype._influxRequest = function(method, url, data) {
     var _this = this;
+    var configs = this.configs;
     var deferred = this.q.defer();
 
     retry(deferred, function() {
@@ -160,8 +179,8 @@ function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
       _this.urls.push(currentUrl);
 
       var params = {
-        u: _this.username,
-        p: _this.password,
+        u: configs.username,
+        p: configs.password
       };
 
       if (method === 'GET') {
@@ -174,7 +193,7 @@ function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
         url:    currentUrl + url,
         params: params,
         data:   data,
-        inspect: { type: 'influxdb' },
+        inspect: { type: 'influxdb' }
       };
 
       options.headers = options.headers || {};
