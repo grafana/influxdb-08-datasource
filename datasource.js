@@ -50,7 +50,7 @@ function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
   InfluxDatasource.prototype.query = function(options) {
     var timeFilter = getTimeFilter(options);
 
-    var promises = _.map(options.targets, function(target) {
+    var promises = _.map(options.targets, (function(target) {
       if (target.hide || !((target.series && target.column) || target.query)) {
         return [];
       }
@@ -71,7 +71,7 @@ function (angular, _, dateMath, InfluxSeries, InfluxQueryBuilder) {
       var handleResponse = _.partial(handleInfluxQueryResponse, alias, queryBuilder.groupByField);
       return this._seriesQuery(query).then(handleResponse);
 
-    }, this);
+    }).bind(this));
 
     return this.q.all(promises).then(function(results) {
       return { data: _.flatten(results) };
