@@ -14,7 +14,7 @@ function (angular, _, $) {
                              'data-toggle="dropdown">{{target.function}}</a><span>(</span>';
 
       var paramTemplate = '<input type="text" style="display:none"' +
-                          ' class="input-mini tight-form-func-param"></input>';
+                          ' class="input-mini tight-form-func-param"/>';
 
       return {
         restrict: 'A',
@@ -82,7 +82,7 @@ function (angular, _, $) {
           function addTypeahead($input) {
             $input.attr('data-provide', 'typeahead');
 
-            var skaup = $scope
+            var skaup = $scope;
             $input.typeahead({
               source: function () {
                 return skaup.ctrl.listColumns.apply(null, arguments);

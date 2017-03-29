@@ -11,7 +11,7 @@ function (angular, sdk) {
     var self;
 
     function InfluxQueryCtrl08($scope, $injector, $timeout) {
-      _super.call(this, $scope, $injector)
+      _super.call(this, $scope, $injector);
       this.timeout = $timeout;
       this.scope = $scope;
 
@@ -47,7 +47,12 @@ function (angular, sdk) {
       //});
 
       self = this;
-    };
+
+      $scope.seriesBlur = self.seriesBlur;
+      $scope.changeFunction = self.changeFunction;
+      $scope.listColumns = self.listColumns;
+      $scope.listSeries = self.listSeries;
+    }
 
     InfluxQueryCtrl08.prototype = Object.create(_super.prototype);
     InfluxQueryCtrl08.prototype.constructor = InfluxQueryCtrl08;
@@ -55,21 +60,21 @@ function (angular, sdk) {
     InfluxQueryCtrl08.templateUrl = 'public/plugins/grafana-influxdb-08-datasource/partials/query.editor.html';
 
     InfluxQueryCtrl08.prototype.toggleEditorMode = function () {
-      this.target.rawQuery = !this.target.rawQuery;
+      self.target.rawQuery = !self.target.rawQuery;
     };
 
     // Cannot use typeahead and ng-change on blur at the same time
     InfluxQueryCtrl08.prototype.seriesBlur = function() {
-      if (this.oldSeries !== this.target.series) {
-        this.oldSeries = this.target.series;
-        this.columnList = null;
-        this.panelCtrl.refresh();
+      if (self.oldSeries !== self.target.series) {
+        self.oldSeries = self.target.series;
+        self.columnList = null;
+        self.panelCtrl.refresh();
       }
     };
 
     InfluxQueryCtrl08.prototype.changeFunction = function(func) {
-      this.target.function = func;
-      this.panelCtrl.refresh();
+      self.target.function = func;
+      self.panelCtrl.refresh();
     };
 
     // called outside of digest
@@ -90,7 +95,7 @@ function (angular, sdk) {
     InfluxQueryCtrl08.prototype.listSeries = function(query, callback) {
       if (query !== '') {
         seriesList = [];
-        this.datasource.listSeries(query).then(function(series) {
+        self.datasource.listSeries(query).then(function(series) {
           seriesList = series;
           callback(seriesList);
         });
